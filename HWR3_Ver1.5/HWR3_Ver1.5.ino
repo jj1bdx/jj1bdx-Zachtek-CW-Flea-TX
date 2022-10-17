@@ -61,7 +61,7 @@ int BandButtonState = 1; //flag for the band button
 int buttonup = 1; //flag for tune up button
 int buttondn = 1; //flag for tune down button
 int tail = 0;  // The counter for the keying tail delay
-int taildefault = 30; // 30msec tail period, near full breakin.
+int taildefault = 200; // 200msec tail period.
 boolean keyed; //flag to indicate keyed state
 int keyedprev = 1; //flag to indicate previous key state after a change
 int unkeyflag = 0; //flag for end of timeout switch back to RX
