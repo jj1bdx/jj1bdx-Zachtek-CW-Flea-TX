@@ -154,6 +154,13 @@ void loop()
   {
     tail = taildefault;
     keyedprev = 1;
+    delay (1);
+    si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_6MA);
+    delay (1);
+    si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_4MA);
+    delay (1);
+    si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_2MA);
+    delay (1);
     si5351.output_enable(SI5351_CLK0, 0); // turn off VFO
     unkeyflag = 1; // flag for tail routine that we just unkeyed
   }
@@ -161,8 +168,16 @@ void loop()
   if (!keyed && keyedprev) // did we just key down?
   {
     digitalWrite(TXRelay, HIGH); // switch TR relay
-    delay (10); // wait 10 millisecond
+    delay (7); // wait 7 milliseconds
+    si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_2MA);
     si5351.output_enable(SI5351_CLK0, 1); //turn on VFO
+    delay (1);
+    si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_4MA);
+    delay (1);
+    si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_6MA);
+    delay (1);
+    si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_8MA);
+    delay (1);
     keyedprev = 0; //set the flag so we know we keyed last time through.
   }
 
