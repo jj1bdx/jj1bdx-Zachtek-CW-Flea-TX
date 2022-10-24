@@ -74,10 +74,14 @@ long Band30mtop = 1013000000; //Highest frequency in 30m Band
 long Band20mbottom = 1400000000; //Lowest frequency in 20m Band
 long Band20mtop = 1407000000; //Highest frequency in 20m Band
 
+long Band40mstart = 701000000; //Start frequency of 40m Band CentiHertz. 100 CentiHertz=1Hz
+long Band30mstart = 1011000000; //Start frequency in 30m Band
+long Band20mstart = 1401000000; //Start frequency in 20m Band
 
 uint32_t ReferenceFrequency = 26000000; //TCXO Frequency used as a reference for the Si5351PLL
 uint8_t CurrentBand = Band40m; //Keeps track on what band we are using right now. Start with 40m.
 long  Currentbandtop, Currentbandbottom; //Keeps tracks of the band edges of the current selected band
+long  Currentbandstart;
 
 
 void setup() {
@@ -103,11 +107,12 @@ void setup() {
 
 
   si5351.init(SI5351_CRYSTAL_LOAD_8PF, ReferenceFrequency, 0); //initialize the VFO
+  freq = Currentbandstart;
   si5351.set_freq(freq, SI5351_CLK0);  //set initial freq
   si5351.set_freq(freq, SI5351_CLK1);
   si5351.output_enable(SI5351_CLK0, 0); //turn off outputs
   si5351.output_enable(SI5351_CLK1, 0);
-  Currentbandtop, Currentbandbottom;
+  Currentbandtop, Currentbandbottom, Currentbandstart;
 
   // Setup the interrupt for the timer interrupt routine
   OCR0A = 0xAF;
@@ -154,30 +159,17 @@ void loop()
   {
     tail = taildefault;
     keyedprev = 1;
-    delay (1);
-    si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_6MA);
-    delay (1);
-    si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_4MA);
-    delay (1);
-    si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_2MA);
-    delay (1);
+    si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_8MA);
     si5351.output_enable(SI5351_CLK0, 0); // turn off VFO
     unkeyflag = 1; // flag for tail routine that we just unkeyed
   }
 
   if (!keyed && keyedprev) // did we just key down?
   {
-    digitalWrite(TXRelay, HIGH); // switch TR relay
-    delay (7); // wait 7 milliseconds
-    si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_2MA);
-    si5351.output_enable(SI5351_CLK0, 1); //turn on VFO
-    delay (1);
-    si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_4MA);
-    delay (1);
-    si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_6MA);
-    delay (1);
     si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_8MA);
-    delay (1);
+    digitalWrite(TXRelay, HIGH); // switch TR relay
+    delay (10); // wait 7 milliseconds
+    si5351.output_enable(SI5351_CLK0, 1); //turn on VFO
     keyedprev = 0; //set the flag so we know we keyed last time through.
   }
 
@@ -244,6 +236,9 @@ void loop()
   if (BandButtonState == Pressed)
   {
     NextBand();
+    freq = Currentbandstart;
+    si5351.set_freq(freq, SI5351_CLK0);  //set vfo freq
+    si5351.set_freq(freq, SI5351_CLK1);
   }
 }
 
@@ -298,6 +293,7 @@ void SetBand(uint8_t BandNum)
       digitalWrite(LED20m, HIGH);
       Currentbandtop = Band20mtop;
       Currentbandbottom = Band20mbottom;
+      Currentbandstart = Band20mstart;
       break;
 
     case Band30m:
@@ -305,6 +301,7 @@ void SetBand(uint8_t BandNum)
       digitalWrite(LED30m, HIGH);
       Currentbandtop = Band30mtop;
       Currentbandbottom = Band30mbottom;
+      Currentbandstart = Band30mstart;
       break;
 
     case Band40m:
@@ -312,7 +309,7 @@ void SetBand(uint8_t BandNum)
       digitalWrite(LED40m, HIGH);
       Currentbandtop = Band40mtop;
       Currentbandbottom = Band40mbottom;
+      Currentbandstart = Band40mstart;
       break;
   }
-  freq = Currentbandbottom;
 }
