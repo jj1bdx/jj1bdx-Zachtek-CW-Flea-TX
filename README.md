@@ -7,8 +7,8 @@
 * CW Transmitter for 40, 30 and 20m bands
 * By Kevin Loughin - KB9RLW and Harry Zachrisson - SM7PNV
 * Open hardware / open source software (claiming GPL)
-* The directory `Hardware` contains the schematics and other hardware information
-* See the directory `HWR3_Ver1.5` for the Arduino IDE source code
+* The directory `Documents` contains the schematics and other hardware information
+* See the directory `fleatx-jj1bdx` for the Arduino IDE source code
 
 ## Original reference
 
