@@ -9,6 +9,7 @@
 * Open hardware / open source software (claiming GPL)
 * The directory `Documents` contains the schematics and other hardware information
 * See the directory `fleatx-jj1bdx` for the Arduino IDE source code
+* Use clang-format for `fleatx-jj1bdx` as `clang-format -i fleatx-jj1bdx.ino` in `fleatx-jj1bdx` directory
 
 ## Original reference
 
