@@ -139,7 +139,7 @@ void loop() {
   // Read state of all inputs. note: 0=key or button pressed, 1=not pressed
   keyed = digitalRead(MorseKey2);
   //&& digitalRead (MorseKey1) ); //Both the ring and the tip on the 3.5mm jack
-  //to the morse key is checked, if either one is shorted to ground
+  // to the morse key is checked, if either one is shorted to ground
   buttonup = digitalRead(tuneup);            // read tuneup button state
   buttondn = digitalRead(tunedn);            // read tunedn button state
   BandButtonState = digitalRead(BandButton); // read Band button state
@@ -245,21 +245,19 @@ void loop() {
 
 // Flashes the band LEDs to indicate Booting
 void StartupLEDBlink() {
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < 3; i++) {
     digitalWrite(LED40m, HIGH);
-    delay(30);
-    digitalWrite(LED30m, HIGH);
-    delay(30);
+    digitalWrite(LED30m, LOW);
     digitalWrite(LED20m, HIGH);
-    delay(30);
+    delay(200);
 
     digitalWrite(LED40m, LOW);
-    delay(30);
-    digitalWrite(LED30m, LOW);
-    delay(30);
+    digitalWrite(LED30m, HIGH);
     digitalWrite(LED20m, LOW);
-    delay(30);
+    delay(200);
   }
+  BandLEDsOff();
+  delay(750);
 }
 
 // Turn off all Band LEDs
